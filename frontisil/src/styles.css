@@ -1,0 +1,8 @@
+@import 'tailwindcss';
+
+@theme {
+  --color-isil: #00aeef;
+  --color-isil-dark: #0095cc;
+  --color-isil-light: #e6f7fd;
+  --color-isil-muted: #b3e5f9;
+}

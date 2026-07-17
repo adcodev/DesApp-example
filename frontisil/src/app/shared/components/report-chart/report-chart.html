@@ -1,0 +1,53 @@
+@if (items().length === 0 || total() === 0) {
+  <p class="py-8 text-center text-sm text-slate-500">Sin datos para graficar</p>
+} @else if (chartType() === 'pie') {
+  <div class="flex flex-col items-center gap-6 sm:flex-row sm:items-start sm:justify-center">
+    <svg viewBox="0 0 200 200" class="h-48 w-48 shrink-0" role="img" aria-label="Gráfico de torta">
+      @for (slice of pieSlices(); track slice.label) {
+        <path [attr.d]="slice.path" [attr.fill]="slice.color" class="transition-opacity hover:opacity-80" />
+      }
+      <circle cx="100" cy="100" r="45" fill="white" />
+      <text x="100" y="96" text-anchor="middle" class="fill-slate-700 text-[14px] font-bold">{{ total() }}</text>
+      <text x="100" y="112" text-anchor="middle" class="fill-slate-400 text-[9px]">total</text>
+    </svg>
+
+    <ul class="w-full space-y-2 sm:max-w-xs">
+      @for (item of items(); track item.label; let i = $index) {
+        <li class="flex items-center justify-between gap-3">
+          <div class="flex min-w-0 items-center gap-2">
+            <span class="h-3 w-3 shrink-0 rounded-full" [style.background-color]="color(i)"></span>
+            <span class="truncate text-sm text-slate-700">{{ item.label }}</span>
+          </div>
+          <div class="shrink-0 text-right">
+            <span class="text-sm font-semibold text-slate-800">{{ item.value }}</span>
+            <span class="ml-1 text-xs text-slate-400">({{ percentage(item.value) }}%)</span>
+          </div>
+        </li>
+      }
+    </ul>
+  </div>
+} @else {
+  <div class="space-y-4">
+    @for (item of items(); track item.label; let i = $index) {
+      <div>
+        <div class="mb-1.5 flex items-center justify-between gap-2">
+          <div class="flex min-w-0 items-center gap-2">
+            <span class="h-3 w-3 shrink-0 rounded-sm" [style.background-color]="color(i)"></span>
+            <span class="truncate text-sm font-medium text-slate-700">{{ item.label }}</span>
+          </div>
+          <span class="shrink-0 text-sm font-semibold text-slate-800">
+            {{ item.value }}
+            <span class="font-normal text-slate-400">({{ percentage(item.value) }}%)</span>
+          </span>
+        </div>
+        <div class="h-3 overflow-hidden rounded-full bg-slate-100">
+          <div
+            class="h-full rounded-full transition-all duration-500"
+            [style.width.%]="barWidth(item.value)"
+            [style.background-color]="color(i)"
+          ></div>
+        </div>
+      </div>
+    }
+  </div>
+}
